@@ -8,14 +8,9 @@ namespace CampeonDeBarrio
 {
     public class Jugador
     {
-        //Atributos
-
         private string nombre;
         private int campañas, puntos;
         private float promedio;
-
-        //Propiedades
-
         /// <summary>
         /// Obtiene o establece el nombre del jugador
         /// </summary>
@@ -24,7 +19,6 @@ namespace CampeonDeBarrio
             get { return nombre; }
             set { nombre = value; }
         }
-
         /// <summary>
         /// Obtiene o establece el valor de las campañas
         /// </summary>
@@ -50,7 +44,6 @@ namespace CampeonDeBarrio
                 CalculaPromedio();
             }
         }
-
         /// <summary>
         /// Obtiene el valor del promedio
         /// </summary>
@@ -58,8 +51,6 @@ namespace CampeonDeBarrio
         {
             get { return promedio; }
         }
-
-        //Constructor de la clase
         public Jugador()
         {
             nombre = "";
@@ -67,9 +58,6 @@ namespace CampeonDeBarrio
             puntos = 0;
             promedio = 0;
         }
-
-        //Metodos
-
         /// <summary>
         /// Calcula el promedio de puntos por campaña para el jugador
         /// </summary>
