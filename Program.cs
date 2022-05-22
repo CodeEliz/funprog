@@ -1,0 +1,115 @@
+﻿using System;
+
+namespace CampeonDeBarrio
+{
+    public class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("*** Campeón del Barrio *** \n\n");
+
+            Console.WriteLine("Se registrarán la cantidad de campañas y puntos totales para 5 jugadores");
+            Console.WriteLine("El campeón será quien tenga mejor promedio de puntos por campaña");
+            Console.WriteLine("Si hay empate con el mejor promedio, se indicará el nombre de los jugadores");
+
+            Jugador[] losJugadores = new Jugador[5];
+
+            //Aqui inicializamos cada posición del arreglo
+            for (int i = 0; i < losJugadores.Length; i++)
+                losJugadores[i] = new Jugador();
+
+            //Aqui ingresamos el nombre de los jugadores, validando que no hayan datos nulos en el nombre
+            //y que los valores de cantidades de puntos y campañas correspondan a los requisitos
+            int jugador = 0;
+            while (jugador < losJugadores.Length)
+            {
+                Console.Write($"\nIngresa el nombre del jugador No. {(jugador + 1)}: ");
+                losJugadores[jugador].Nombre = Console.ReadLine();
+
+                //Aqui validamos si el dato es nulo
+                if (losJugadores[jugador].Nombre.Length == 0)
+                    Console.WriteLine("El nombre del jugador no pueder ser nulo. Intenta nuevamente");
+                else
+                {
+                    try
+                    {
+                        Console.Write("Cantidad de campañas jugadas: ");
+                        losJugadores[jugador].Campañas = int.Parse(Console.ReadLine());
+
+                        //Si la cantidad de campañas es diferente de cero, se pregunta por los puntos totales
+                        if (losJugadores[jugador].Campañas != 0)
+                        {
+                            Console.Write("Cantidad de puntos obtenidos: ");
+                            losJugadores[jugador].Puntos = int.Parse(Console.ReadLine());
+
+                            //Si los puntos están en el rango y la cantidad de campañas son válidas,
+                            //se pasa al siguiente jugador
+                            if (losJugadores[jugador].Puntos >= 100 && losJugadores[jugador].Puntos <= 400 && losJugadores[jugador].Campañas >= 0)
+                                jugador++;
+                            else
+                                Console.WriteLine("Las cantidades deben ser enteros positivos. " +
+                                    "Los puntos deben estar en un rango [100-400]. " +
+                                    "Intenta nuevamente!");
+                        }
+                        else
+                        {
+                            // Si las campañas son cero, los puntos son cero y se pasa al siguiente jugador
+                            losJugadores[jugador].Puntos = 0;
+                            jugador++;
+                        }
+                    }
+                    catch (FormatException elError)
+                    {
+                        Console.WriteLine("Las cantidades deben ser enteros positivos. Intenta nuevamente!");
+                        Console.WriteLine($"Error: {elError.Message}");
+                    }
+                }
+            }
+
+            //Visualizamos datos ingresados
+            Console.WriteLine("\n\nLos datos ingresados para los jugadores son: \n");
+
+            foreach (Jugador unJugador in losJugadores)
+                Console.WriteLine(unJugador.InfoJugador());
+
+            Jugador[] jugadoresCampeones = IdentificaCampeon(losJugadores);
+            if (jugadoresCampeones.Length == 1)
+            {
+                Console.WriteLine($"\n\nEl Campeón del Barrio es {jugadoresCampeones[0].Nombre}\n" +
+                $" que obtuvo promedio de {jugadoresCampeones[0].Promedio.ToString("0.00")} puntos por campaña.");
+            }
+            else
+            {
+                Console.WriteLine($"\n\nHubo empate con un promedio de {jugadoresCampeones[0].Promedio.ToString("0.00")}\n");
+                foreach (Jugador unJugador in jugadoresCampeones)
+                    Console.WriteLine($"- {unJugador.Nombre} con {unJugador.Campañas} campaña(s) jugadas");
+            }
+        }
+
+        /// <summary>
+        /// Identifica quien es el campeón entre los jugadores a partir del criterio definido
+        /// </summary>
+        /// <param name="losJugadores">Arreglo de los jugadores</param>
+        public static Jugador[] IdentificaCampeon(Jugador[] arregloJugadores)
+        {
+            Jugador jugadorCampeon = arregloJugadores[0];
+            for (int i = 1; i < arregloJugadores.Length; i++)
+                if (jugadorCampeon.Promedio < arregloJugadores[i].Promedio)
+                    jugadorCampeon = arregloJugadores[i];
+            int cantidadCampeones = 0;
+            foreach (Jugador unJugador in arregloJugadores)
+                if (unJugador.Promedio == jugadorCampeon.Promedio)
+                    cantidadCampeones++;
+            Jugador[] campeonesEncontrados = new Jugador[cantidadCampeones];
+            int contadorCampeones = 0;
+            foreach (Jugador unJugador in arregloJugadores)
+                if (unJugador.Promedio == jugadorCampeon.Promedio)
+                {
+                    campeonesEncontrados[contadorCampeones] = unJugador;
+                    contadorCampeones++;
+                }
+            return campeonesEncontrados;
+        }
+    }
+}
+
